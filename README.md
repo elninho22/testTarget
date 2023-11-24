@@ -1,16 +1,28 @@
-# testarget
+APP TEST
+Projeto Teste Target - Flutter
 
-A new Flutter project.
+Flutter version: 3.13.2 Dart Version: 3.1.0 State Manage: Mobx Injection: Modular Storage: SharedPreferences Alerts: Asuka
 
-## Getting Started
+----------------
 
-This project is a starting point for a Flutter application.
+Clone Project
 
-A few resources to get you started if this is your first Flutter project:
+Run Dependences => flutter clean && flutter pub get && flutter pub run build_runner build --delete-conflicting-outputs
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+Run => device emulator android or ios
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+
+--------------
+
+
+will it be possible to carry out
+
+login validation with pre-defined rules
+
+save text information locally
+
+recover saved information open and close app
+
+remove information
+
+update the information
