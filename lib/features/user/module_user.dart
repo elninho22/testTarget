@@ -1,7 +1,6 @@
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:testarget/features/user/presenter/pages/user_page.dart';
 
-import '../../core/local_storages/local_storage.dart';
 import '../../core/rest_client/rest_client.dart';
 import 'domain/repositories/user_repository.dart';
 import 'domain/usecases/user_usecase.dart';
@@ -33,7 +32,6 @@ class ModuleUser extends Module {
     //CONTROLLER
     Bind.lazySingleton(
       (i) => UserStore(
-        shared: i.get<LocalStorage>(),
         userUsecase: i(),
       ),
     ),

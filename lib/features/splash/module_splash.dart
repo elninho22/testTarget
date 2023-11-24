@@ -8,7 +8,7 @@ class ModuleSplash extends Module {
   final List<Bind> binds = [
     Bind.lazySingleton(
       (i) => SplashStore(
-        shared: i.get<LocalStorage>(),
+        i.get<LocalStorage>(),
       ),
     ),
   ];
