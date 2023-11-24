@@ -53,7 +53,7 @@ abstract class _UserStoreBase with Store {
 
   _loginUser({required ParametersUser parameters}) async {
     try {
-      initLoading().then((value) => Modular.to.pushNamed(AppRoutes.user));
+      initLoading().then((value) => Modular.to.pushNamed(AppRoutes.saveData));
 
       //SIMULATION CONNECT API REQUEST LOGIN USER
       showLoading(true);

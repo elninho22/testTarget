@@ -1,5 +1,6 @@
 
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:testarget/features/saveData/module_save_data.dart';
 
 import 'core/core_module/core_module.dart';
 import 'features/splash/module_splash.dart';
@@ -16,5 +17,6 @@ class AppModule extends Module {
   final List<ModularRoute> routes = [
     ModuleRoute(Modular.initialRoute, module: ModuleSplash()),
     ModuleRoute('/user', module: ModuleUser()),
+    ModuleRoute('/saveData', module: ModuleSaveData()),
   ];
 }

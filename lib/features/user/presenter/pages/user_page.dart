@@ -34,7 +34,6 @@ class _AuthPageState extends State<AuthPage>
   @override
   void initState() {
     super.initState();
-    _controller.initLoading();
     _controllerBuilder = AnimationController(vsync: this);
     WidgetsBinding.instance.addPostFrameCallback((_) {});
     WidgetsBinding.instance.addObserver(this);
