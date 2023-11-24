@@ -30,7 +30,7 @@ class _SaveDataPageState extends State<SaveDataPage>
   @override
   void initState() {
     super.initState();
-    _controller.initLoading();
+    // _controller.initLoading();
     _controllerBuilder = AnimationController(vsync: this);
     WidgetsBinding.instance.addPostFrameCallback((_) {});
     WidgetsBinding.instance.addObserver(this);
@@ -91,12 +91,13 @@ class _SaveDataPageState extends State<SaveDataPage>
                                           borderRadius:
                                               BorderRadius.circular(15.0),
                                         ),
-                                        margin:const EdgeInsets.fromLTRB(
+                                        margin: const EdgeInsets.fromLTRB(
                                             20.0, 6.0, 20.0, 0.0),
                                         child: ListTile(
                                           title: Text(
                                             'teztoooo',
-                                            style: FactoryTextStyles.bodySmall().copyWith(fontSize: 20.h),
+                                            style: FactoryTextStyles.bodySmall()
+                                                .copyWith(fontSize: 20.h),
                                             textAlign: TextAlign.center,
                                           ),
                                           trailing: SizedBox(
@@ -133,6 +134,7 @@ class _SaveDataPageState extends State<SaveDataPage>
                                       minLines: 1,
                                       controller: _textController,
                                       focusNode: _focusText,
+                                      autofocus: true,
                                       onEditingComplete: () => onPressed(),
                                       onFieldSubmitted: (data) => Helpers.focus(
                                           context, _focusText, _focusText),
@@ -166,8 +168,10 @@ class _SaveDataPageState extends State<SaveDataPage>
     if (formValid) {
       Helpers.unfocusForm(context);
       _formKey.currentState?.save();
+      int createdAt = DateTime.now().millisecondsSinceEpoch;
       ParametersSaveData parameters = ParametersSaveData(
         text: _textController.text.toString(),
+        createdAt: createdAt,
       );
       await _controller.saveDataUser(parameters: parameters);
     }

@@ -68,7 +68,17 @@ class _AuthPageState extends State<AuthPage>
               builder: (context, constraints) {
                 return Container(
                   padding: const EdgeInsets.symmetric(horizontal: 30),
-                  color: Colors.white,
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.topRight,
+                      end: Alignment.bottomLeft,
+                      stops: [0.1, 0.9],
+                      colors: [
+                        Color(0xFF205064),
+                        Color(0x277278),
+                      ],
+                    ),
+                  ),
                   child: Form(
                       key: _formKey,
                       child: Column(

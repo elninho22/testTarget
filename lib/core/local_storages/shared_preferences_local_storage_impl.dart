@@ -29,7 +29,7 @@ class SharedPreferencesLocalStorageImpl implements LocalStorage {
       return sp.getBool(key) as P?;
     } else if (P == double) {
       return sp.getDouble(key) as P?;
-    } else if (P == List) {
+    } else if (P == List<String>) {
       return sp.getStringList(key) as P?;
     } else {
       throw Exception('Type not supported');
@@ -48,7 +48,7 @@ class SharedPreferencesLocalStorageImpl implements LocalStorage {
       sp.setBool(key, value as bool);
     } else if (P == double) {
       sp.setDouble(key, value as double);
-    } else if (P == List) {
+    } else if (P == List<String>) {
       sp.setStringList(key, value as List<String>);
     } else {
       throw Exception('Type not supported');
