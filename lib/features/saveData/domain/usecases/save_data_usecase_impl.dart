@@ -3,7 +3,7 @@ import 'package:testarget/core/exceptions/exception_generic.dart';
 import '../../../saveData/infra/response/response_registers.dart';
 import '../../../saveData/infra/response/response_save_register.dart';
 import '../../../../core/exceptions/failure.dart';
-import '../../infra/parameters/register_entity.dart';
+import '../../infra/response/response_delete_register.dart';
 import '../repositories/save_data_repository.dart';
 import './save_data_usecase.dart';
 
@@ -19,8 +19,8 @@ class SaveDataUsecaseImpl implements SaveDataUsecase {
 
   @override
   Future<Either<Failure, ResponseSaveRegister>> saveRegisterUsecase(
-      RegisterEntity parameters) async {
-    if (parameters.isEmptyContent) {
+      List<String> parameters) async {
+    if (parameters.isEmpty) {
       return left(
         ExceptionGeneric(
           message: 'Preencha o campo antes de salvar',
@@ -32,7 +32,7 @@ class SaveDataUsecaseImpl implements SaveDataUsecase {
   }
   
   @override
-  Future<Either<Failure, bool>> deleteRegisterUsecase() {
+  Future<Either<Failure, ResponseDeleteRegister>> deleteRegisterUsecase() {
     return repository.deleteRegisterRepository();
   }
 }

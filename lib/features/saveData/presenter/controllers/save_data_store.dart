@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:dartz/dartz.dart';
 import 'package:mobx/mobx.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -5,6 +7,7 @@ import '../../../../core/exceptions/failure.dart';
 import '../../../../core/helpers/alert_asuka.dart';
 import '../../domain/usecases/save_data_usecase.dart';
 import '../../infra/parameters/register_entity.dart';
+import '../../infra/response/response_delete_register.dart';
 import '../../infra/response/response_registers.dart';
 import '../../infra/response/response_save_register.dart';
 
@@ -75,7 +78,9 @@ abstract class _SaveDataStoreBase with Store {
     required RegisterEntity parameters,
   }) async {
     showLoading(true);
-    bool result = await _newRegister(parameters);
+    List<String> params = [];
+    params.add(jsonEncode(parameters.toMap()));
+    bool result = await _newRegister(params);
     if (result) {
       AlertAsuka.success('Registro salvo');
       RegisterEntity element = RegisterEntity(
@@ -88,12 +93,12 @@ abstract class _SaveDataStoreBase with Store {
     showLoading(false);
   }
 
-  Future<bool> _newRegister(RegisterEntity parameters) async {
+  Future<bool> _newRegister(List<String> parameters) async {
     try {
       Either<Failure, ResponseSaveRegister> response =
           await _usecase.saveRegisterUsecase(parameters);
       bool result = response.fold((l) {
-        AlertAsuka.warning('Problema para listar os registros');
+        AlertAsuka.warning('Problema para salvar o registro');
         return false;
       }, (r) {
         if (r.data == null || r.statusCode == 500) return false;
@@ -106,17 +111,22 @@ abstract class _SaveDataStoreBase with Store {
   }
 
   removeItem(int index) async {
+    showLoading(true);
     List<RegisterEntity> listOld = [];
+    List<String> params = [];
     listOld.addAll(listRegisters);
     listOld.removeAt(index);
-    await Future.delayed(const Duration(milliseconds: 300));
     bool? result = await _deleteRegister();
     if (result == true) {
       listRegisters.clear();
-      listRegisters.addAll(listOld);  
-
-          //  await _usecase.saveRegisterUsecase();
+      listRegisters.addAll(listOld);
+      for (var i = 0; i < listOld.length; i++) {
+        params.add(jsonEncode(listOld[i].toMap()));
+      }
+      await Future.delayed(const Duration(milliseconds: 200));
+      if (listOld.isNotEmpty) await _newRegister(params);
     }
+    showLoading(false);
   }
 
   @action
@@ -129,15 +139,21 @@ abstract class _SaveDataStoreBase with Store {
   editItem(RegisterEntity paramters) async {
     showLoading(true);
     List<RegisterEntity> listOld = [];
+    List<String> params = [];
     listOld.addAll(listRegisters);
     listOld.removeAt(indexEdit);
     listOld.insert(indexEdit, paramters);
 
     await Future.delayed(const Duration(milliseconds: 300));
-    bool? result = await _deleteRegister();
-    if (result == true) {
+    bool result = await _deleteRegister();
+    if (result) {
       listRegisters.clear();
       listRegisters.addAll(listOld);
+      for (var i = 0; i < listOld.length; i++) {
+        params.add(jsonEncode(listOld[i].toMap()));
+      }
+      await Future.delayed(const Duration(milliseconds: 200));
+      await _newRegister(params);
     }
 
     isEdit = false;
@@ -146,12 +162,13 @@ abstract class _SaveDataStoreBase with Store {
 
   Future<bool> _deleteRegister() async {
     try {
-      Either<Failure, bool> response = await _usecase.deleteRegisterUsecase();
+      Either<Failure, ResponseDeleteRegister> response =
+          await _usecase.deleteRegisterUsecase();
       bool result = response.fold((l) {
         AlertAsuka.warning('Problema para deletar o registro');
         return false;
       }, (r) {
-        return r;
+        return r.data;
       });
       return result;
     } catch (e) {

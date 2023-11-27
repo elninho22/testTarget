@@ -1,13 +1,12 @@
-import 'dart:convert';
 
 import 'package:testarget/core/local_storages/const_strings.dart';
 import 'package:testarget/core/local_storages/local_storage.dart';
-import 'package:testarget/features/saveData/infra/response/response_registers.dart';
-import 'package:testarget/features/saveData/infra/response/response_save_register.dart';
+import '../../../saveData/infra/response/response_registers.dart';
+import '../../../saveData/infra/response/response_save_register.dart';
 
 import '../../../../core/exceptions/exception_generic.dart';
 import '../../infra/datasources/save_data_datasource.dart';
-import '../../infra/parameters/register_entity.dart';
+import '../../infra/response/response_delete_register.dart';
 
 class SaveDataDatasourceImpl implements SaveDataDatasource {
   final LocalStorage _shared;
@@ -34,7 +33,7 @@ class SaveDataDatasourceImpl implements SaveDataDatasource {
 
   @override
   Future<ResponseSaveRegister> saveRegisterDatasource(
-      RegisterEntity parameters) async {
+      List<String> parameters) async {
     try {
       bool resp = await _prepareSaveDataStorage(parameters);
       return ResponseSaveRegister.fromMap(
@@ -51,17 +50,41 @@ class SaveDataDatasourceImpl implements SaveDataDatasource {
     }
   }
 
+  @override
+  Future<ResponseDeleteRegister> deleteRegisterDatasource() async {
+    try {
+      bool resp = await _removeKeyStorage();
+      return ResponseDeleteRegister.fromMap(
+        response: resp,
+        statusCode: resp ? 200 : 500,
+        message:
+            resp ? 'Registro deletado' : 'Problema para deletar o registro',
+      );
+    } catch (e) {
+      throw ExceptionGeneric(
+        error: e.toString(),
+        message: 'Problema para deletar os registros',
+        path: 'SaveDataDatasourceImpl(deleteRegisterDatasource)',
+      );
+    }
+  }
+
+  Future<bool> _removeKeyStorage() async {
+    bool? result = await  _shared.remove(ConstStrings.USERDATA);
+    return result == true;
+  }
+
   Future<List<String>?> _prepareFindDataStorage() async {
     List<String>? result = await _shared.read(ConstStrings.USERDATA);
     if (result == null) return null;
     return result;
   }
 
-  Future<bool> _prepareSaveDataStorage(RegisterEntity parameters) async {
+  Future<bool> _prepareSaveDataStorage(List<String> parameters) async {
     try {
       List<String> dataOld = <String>[];
       List<String>? result = await _prepareFindDataStorage();
-      dataOld.add(jsonEncode(parameters.toMap()));
+      dataOld.addAll(parameters);
 
       if (result != null) {
         dataOld.addAll(result);
@@ -72,20 +95,6 @@ class SaveDataDatasourceImpl implements SaveDataDatasource {
       return true;
     } catch (e) {
       return false;
-    }
-  }
-
-  @override
-  Future<bool> deleteRegisterDatasource() async {
-    try {
-      bool? result = await _shared.contains(ConstStrings.USERDATA);
-      return result;
-    } catch (e) {
-      throw ExceptionGeneric(
-        error: e.toString(),
-        message: 'Problema para deletar os registros',
-        path: 'SaveDataDatasourceImpl(deleteRegisterDatasource)',
-      );
     }
   }
 }

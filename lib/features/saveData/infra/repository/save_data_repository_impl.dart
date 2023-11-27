@@ -5,7 +5,7 @@ import '../../../../core/exceptions/exception_generic.dart';
 import '../../../../core/exceptions/failure.dart';
 import '../../domain/repositories/save_data_repository.dart';
 import '../datasources/save_data_datasource.dart';
-import '../parameters/register_entity.dart';
+import '../response/response_delete_register.dart';
 
 class SaveDataRepositoryImpl implements SaveDataRepository {
   final SaveDataDatasource datasource;
@@ -30,7 +30,7 @@ class SaveDataRepositoryImpl implements SaveDataRepository {
 
   @override
   Future<Either<Failure, ResponseSaveRegister>> saveRegisterRepository(
-      RegisterEntity parameters) async {
+      List<String> parameters) async {
     try {
       final result = await datasource.saveRegisterDatasource(parameters);
       return Right(result);
@@ -46,7 +46,7 @@ class SaveDataRepositoryImpl implements SaveDataRepository {
   }
 
   @override
-  Future<Either<Failure, bool>> deleteRegisterRepository() async {
+  Future<Either<Failure, ResponseDeleteRegister>> deleteRegisterRepository() async {
     try {
       final result = await datasource.deleteRegisterDatasource();
       return Right(result);

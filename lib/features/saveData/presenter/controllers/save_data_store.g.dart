@@ -73,6 +73,14 @@ mixin _$SaveDataStore on _SaveDataStoreBase, Store {
     });
   }
 
+  late final _$editItemAsyncAction =
+      AsyncAction('_SaveDataStoreBase.editItem', context: context);
+
+  @override
+  Future editItem(RegisterEntity paramters) {
+    return _$editItemAsyncAction.run(() => super.editItem(paramters));
+  }
+
   late final _$_SaveDataStoreBaseActionController =
       ActionController(name: '_SaveDataStoreBase', context: context);
 
@@ -93,17 +101,6 @@ mixin _$SaveDataStore on _SaveDataStoreBase, Store {
         name: '_SaveDataStoreBase.setIndex');
     try {
       return super.setIndex(index);
-    } finally {
-      _$_SaveDataStoreBaseActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
-  dynamic editItem(RegisterEntity paramters) {
-    final _$actionInfo = _$_SaveDataStoreBaseActionController.startAction(
-        name: '_SaveDataStoreBase.editItem');
-    try {
-      return super.editItem(paramters);
     } finally {
       _$_SaveDataStoreBaseActionController.endAction(_$actionInfo);
     }
