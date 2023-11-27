@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:testarget/core/loading/loading_default.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:testarget/core/ui/extensions/size_screen_extension.dart';
 import 'package:testarget/core/ui/text_styles.dart';
 import '../../../../core/factory_inputs/form_field_login.dart';
 import '../../../../core/helpers/helpers.dart';
 import '../../../../core/helpers/validators.dart';
 import '../../../../core/ui/button_default.dart';
+import '../../../../core/ui/const_colors.dart';
 import '../../infra/parameters/parameters_user.dart';
 import '../store/user_store.dart';
+import '../widgets/customNavigatorBar.dart';
+import '../widgets/helper_label_info.dart';
 
 class AuthPage extends StatefulWidget {
   const AuthPage({Key? key}) : super(key: key);
@@ -50,116 +51,95 @@ class _AuthPageState extends State<AuthPage>
 
   @override
   Widget build(BuildContext context) {
+    LinearGradient gradient = const LinearGradient(
+      colors: [
+        ConstColors.greenGradientOne,
+        ConstColors.greenGradientTwo,
+      ],
+      begin: Alignment.topRight,
+      end: Alignment.bottomLeft,
+      stops: [0.1, 0.9],
+      tileMode: TileMode.clamp,
+    );
+
     return Observer(
       builder: (context) {
         return LoadingDefault(
           isLoading: _controller.isLoading,
           child: Scaffold(
             resizeToAvoidBottomInset: false,
-            appBar: AppBar(
-              systemOverlayStyle: const SystemUiOverlayStyle(
-                statusBarIconBrightness: Brightness.light, //Android
-                statusBarBrightness: Brightness.light, //IOS
-              ),
-              shadowColor: Colors.transparent,
-              backgroundColor: Colors.transparent,
-            ),
             body: LayoutBuilder(
               builder: (context, constraints) {
                 return Container(
                   padding: const EdgeInsets.symmetric(horizontal: 30),
                   decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      begin: Alignment.topRight,
-                      end: Alignment.bottomLeft,
-                      stops: [0.1, 0.9],
-                      colors: [
-                        Color(0xFF205064),
-                        Color(0x277278),
-                      ],
-                    ),
+                    gradient: gradient,
                   ),
                   child: Form(
                       key: _formKey,
                       child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Expanded(
-                            child: Center(
-                              child: SingleChildScrollView(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  children: [
-                                    const SizedBox(height: 35),
-                                    CustomTextFormField(
-                                      onChanged: (v) => setState(() => ()),
-                                      focusNode: _focusMail,
-                                      formFieldType: TextInputType.emailAddress,
-                                      labelText: 'E-mail',
-                                      maxLength: 20,
-                                      onFieldSubmitted: (data) => Helpers.focus(
-                                          context, _focusMail, _focusPassword),
-                                      controller: _emailController,
-                                      validators: FactoryValidators.multiple([
-                                        FactoryValidators.required(
-                                            m: 'E-mail obrigatório'),
-                                        FactoryValidators.email(
-                                            m: 'E-mail ínvalido'),
-                                        FactoryValidators.max(20, m: 'Máx'),
-                                      ]),
-                                    ),
-                                    sizedBoxDefault,
-                                    CustomTextFormField(
-                                      onChanged: (v) => setState(() => ()),
-                                      focusNode: _focusPassword,
-                                      labelText: 'Senha',
-                                      maxLength: 20,
-                                      controller: _passwordController,
-                                      toggleObscureText: _toggleObscureText,
-                                      obscureText: _isObscurePassword,
-                                      validators: FactoryValidators.multiple([
-                                        FactoryValidators.min(2,
-                                            m: 'Mínimo 2 Caracteres'),
-                                        FactoryValidators.required(
-                                            m: 'Senha obrigatório'),
-                                        FactoryValidators.max(20,
-                                            m: 'Máximo de Caracteres'),
-                                        FactoryValidators.validPassword(
-                                            m: 'Não pode conter caracteres especiais'),
-                                      ]),
-                                    ),
-                                    sizedBoxDefault,
-                                    ButtonDefault(
-                                      label: 'Entrar',
-                                      onPressed: () => onPressed(),
-                                    )
-                                  ],
-                                ),
-                              ),
+                          const SizedBox(height: 35),
+                          const WidgetHelperLabelInfo(titile: 'Usúario'),
+                          sizedBoxDefault,
+                          CustomTextFormField(
+                            fillColor: ConstColors.white,
+                            onChanged: (v) => setState(() => ()),
+                            focusNode: _focusMail,
+                            formFieldType: TextInputType.emailAddress,
+                            labelText: 'E-mail',
+                            maxLength: 20,
+                            onFieldSubmitted: (data) => Helpers.focus(
+                                context, _focusMail, _focusPassword),
+                            controller: _emailController,
+                            validators: FactoryValidators.multiple([
+                              FactoryValidators.required(
+                                  m: 'E-mail obrigatório'),
+                              FactoryValidators.email(m: 'E-mail ínvalido'),
+                              FactoryValidators.max(20, m: 'Máx'),
+                            ]),
+                          ),
+                          sizedBoxDefault,
+                          const WidgetHelperLabelInfo(titile: 'Senha'),
+                          sizedBoxDefault,
+                          CustomTextFormField(
+                            fillColor: ConstColors.white,
+                            onChanged: (v) => setState(() => ()),
+                            focusNode: _focusPassword,
+                            labelText: 'Senha',
+                            maxLength: 20,
+                            controller: _passwordController,
+                            toggleObscureText: _toggleObscureText,
+                            obscureText: _isObscurePassword,
+                            validators: FactoryValidators.multiple([
+                              FactoryValidators.min(2,
+                                  m: 'Mínimo 2 Caracteres'),
+                              FactoryValidators.required(
+                                  m: 'Senha obrigatório'),
+                              FactoryValidators.max(20,
+                                  m: 'Máximo de Caracteres'),
+                              FactoryValidators.validPassword(
+                                  m: 'Não pode conter caracteres especiais'),
+                            ]),
+                          ),
+                          sizedBoxDefault,
+                          ButtonDefault(
+                            labelStyle: FactoryTextStyles.bodySmall(
+                              color: ConstColors.white,
+                            ).copyWith(
+                              fontSize: 22,
                             ),
+                            label: 'Entrar',
+                            onPressed: () => onPressed(),
                           ),
                         ],
                       )),
                 );
               },
             ),
-            bottomNavigationBar: SizedBox(
-              height: 100.h,
-              child: TextButton(
-                onPressed: () async {
-                  await _controller.launchInBrowser(
-                    'https://www.google.com.br',
-                  );
-                },
-                child: Text(
-                  'Política de Privacidade',
-                  style: FactoryTextStyles.bodySmall(),
-                  textAlign: TextAlign.center,
-                ),
-              ),
-            ),
+            bottomNavigationBar: CustomBottomNavigatorBar(controller: _controller),
           ),
         );
       },

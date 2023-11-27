@@ -1,7 +1,9 @@
-import '../models/user_entity_extends.dart';
+import 'package:testarget/features/user/infra/parameters/parameters_user.dart';
+
+
 
 class ResponseUser {
-  final UserExtends? data;
+  final ParametersUser? data;
   final String? message;
   final int? statusCode;
 
@@ -17,7 +19,7 @@ class ResponseUser {
     String? message,
   }) {
     return ResponseUser(
-      data: response != null ? UserExtends.fromMap(response) : null,
+      data: response != null ? ParametersUser.fromMap(response) : null,
       message: message,
       statusCode: statusCode,
     );

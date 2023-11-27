@@ -1,9 +1,11 @@
 import 'package:dartz/dartz.dart';
+import '../../../saveData/infra/response/response_registers.dart';
+import '../../../saveData/infra/response/response_save_register.dart';
+import '../../../../core/exceptions/exception_generic.dart';
 import '../../../../core/exceptions/failure.dart';
-import '../../../../core/lang/app_translation.dart';
 import '../../domain/repositories/save_data_repository.dart';
 import '../datasources/save_data_datasource.dart';
-import '../parameters/parameters_save_data.dart';
+import '../parameters/register_entity.dart';
 
 class SaveDataRepositoryImpl implements SaveDataRepository {
   final SaveDataDatasource datasource;
@@ -11,13 +13,51 @@ class SaveDataRepositoryImpl implements SaveDataRepository {
   SaveDataRepositoryImpl(this.datasource);
 
   @override
-  Future<Either<Failure, void>> call(
-     ParametersSaveData parameters) async {
+  Future<Either<Failure, ResponseRegisters>> findAllRegisterRepository() async {
     try {
-      final result = await datasource(parameters);
-      return right(result);
+      final result = await datasource.findAllRegisterDatasource();
+      return Right(result);
     } catch (e) {
-      return left(Failure(message: AppTranslationString.string('error')));
+      return Left(
+        ExceptionGeneric(
+          error: e,
+          message: e.toString(),
+          path: 'SaveDataRepositoryImpl(findAllRegisterRepository)',
+        ),
+      );
+    }
+  }
+
+  @override
+  Future<Either<Failure, ResponseSaveRegister>> saveRegisterRepository(
+      RegisterEntity parameters) async {
+    try {
+      final result = await datasource.saveRegisterDatasource(parameters);
+      return Right(result);
+    } catch (e) {
+      return Left(
+        ExceptionGeneric(
+          error: e,
+          message: e.toString(),
+          path: 'SaveDataRepositoryImpl(saveRegisterRepository)',
+        ),
+      );
+    }
+  }
+
+  @override
+  Future<Either<Failure, bool>> deleteRegisterRepository() async {
+    try {
+      final result = await datasource.deleteRegisterDatasource();
+      return Right(result);
+    } catch (e) {
+      return Left(
+        ExceptionGeneric(
+          error: e,
+          message: e.toString(),
+          path: 'SaveDataRepositoryImpl(deleteRegisterRepository)',
+        ),
+      );
     }
   }
 }

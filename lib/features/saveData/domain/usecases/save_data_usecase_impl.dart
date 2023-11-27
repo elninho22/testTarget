@@ -1,10 +1,11 @@
 import 'package:dartz/dartz.dart';
 import 'package:testarget/core/exceptions/exception_generic.dart';
+import '../../../saveData/infra/response/response_registers.dart';
+import '../../../saveData/infra/response/response_save_register.dart';
 import '../../../../core/exceptions/failure.dart';
-import '../../../../core/lang/app_translation.dart';
-import '../../infra/parameters/parameters_save_data.dart';
+import '../../infra/parameters/register_entity.dart';
 import '../repositories/save_data_repository.dart';
-import 'save_data_usecase.dart';
+import './save_data_usecase.dart';
 
 class SaveDataUsecaseImpl implements SaveDataUsecase {
   final SaveDataRepository repository;
@@ -12,20 +13,26 @@ class SaveDataUsecaseImpl implements SaveDataUsecase {
   SaveDataUsecaseImpl(this.repository);
 
   @override
-  Future<Either<Failure, void>> call(
-      ParametersSaveData parameters) async {
-    try {
-      if (parameters.text == '') {
-        return left(
-          ExceptionGeneric(
-            message: 'Parameters Invalid',
-            path: 'SaveDataUsecaseImpl',
-          ),
-        );
-      }
-      return repository(parameters);
-    } catch (e) {
-      return left(Failure(message: AppTranslationString.string('error')));
+  Future<Either<Failure, ResponseRegisters>> findAllRegisterUsecase() {
+    return repository.findAllRegisterRepository();
+  }
+
+  @override
+  Future<Either<Failure, ResponseSaveRegister>> saveRegisterUsecase(
+      RegisterEntity parameters) async {
+    if (parameters.isEmptyContent) {
+      return left(
+        ExceptionGeneric(
+          message: 'Preencha o campo antes de salvar',
+          path: 'SaveDataUsecaseImpl',
+        ),
+      );
     }
+    return repository.saveRegisterRepository(parameters);
+  }
+  
+  @override
+  Future<Either<Failure, bool>> deleteRegisterUsecase() {
+    return repository.deleteRegisterRepository();
   }
 }

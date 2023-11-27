@@ -19,10 +19,28 @@ class ConstColors {
   /// Primary light 100 [CEDF00]
   static const Color primary100 = Color(0xFFCEDF00);
 
-    /// black full [FF509D]
+  /// black full [FF509D]
   static const Color blackFull = Colors.black;
 
   /// Light black 100 [1C1B1F]
   static const Color black100 = Color(0XFF1C1B1F);
 
+  ///  green100 100 [44BD6E]
+  static const Color green100 = Color(0XFF44BD6E);
+
+  ///  greenGradientOne  [205064]
+  static const Color greenGradientOne = Color(0xFF205064);
+
+  ///  greenGradientTwo  [277278]
+  static const Color greenGradientTwo = Color(0xFF277278);
+  static const LinearGradient gradient = LinearGradient(
+    colors: [
+      ConstColors.greenGradientOne,
+      ConstColors.greenGradientTwo,
+    ],
+    begin: Alignment.topRight,
+    end: Alignment.bottomLeft,
+    stops: [0.1, 0.9],
+    tileMode: TileMode.clamp,
+  );
 }

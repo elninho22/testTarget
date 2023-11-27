@@ -17,6 +17,12 @@ class ParametersUser {
     );
   }
 
+    factory ParametersUser.fromMap(Map<String, dynamic> json) => ParametersUser(
+        email: json["email"],
+        password: json["password"],
+      );
+
+
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
       'email': email,
